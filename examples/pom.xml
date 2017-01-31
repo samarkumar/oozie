@@ -31,6 +31,12 @@
     <name>Apache Oozie Examples</name>
     <packaging>jar</packaging>
 
+    <properties>
+        <spark.version>2.0.0</spark.version>
+        <spark.streaming.kafka.version>1.6.2</spark.streaming.kafka.version>
+        <spark.bagel.version>1.6.2</spark.bagel.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.hadoop</groupId>

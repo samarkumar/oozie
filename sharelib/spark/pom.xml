@@ -35,6 +35,9 @@
     <properties>
         <sharelib.action.postfix>spark</sharelib.action.postfix>
         <sharelib.transitive.filtering>false</sharelib.transitive.filtering>
+        <spark.version>1.6.1</spark.version>
+        <spark.streaming.kafka.version>1.6.1</spark.streaming.kafka.version>
+        <spark.bagel.version>1.6.1</spark.bagel.version>
     </properties>
 
     <dependencies>

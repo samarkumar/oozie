@@ -36,6 +36,8 @@ import java.util.Map;
 
 public class SparkActionExecutor extends JavaActionExecutor {
     public static final String SPARK_MAIN_CLASS_NAME = "org.apache.oozie.action.hadoop.SparkMain";
+    public static final String SPARK_MAIN_CLASS_NAME_2 = "org.apache.oozie.action.hadoop.SparkMain2";
+
     public static final String TASK_USER_PRECEDENCE = "mapreduce.task.classpath.user.precedence"; // hadoop-2
     public static final String TASK_USER_CLASSPATH_PRECEDENCE = "mapreduce.user.classpath.first";  // hadoop-1
     public static final String SPARK_MASTER = "oozie.spark.master";
@@ -44,6 +46,8 @@ public class SparkActionExecutor extends JavaActionExecutor {
     public static final String SPARK_JOB_NAME = "oozie.spark.name";
     public static final String SPARK_CLASS = "oozie.spark.class";
     public static final String SPARK_JAR = "oozie.spark.jar";
+    public int sparkVersion = 1 ;
+
     public static final String MAPRED_CHILD_ENV = "mapred.child.env";
     private static final String CONF_OOZIE_SPARK_SETUP_HADOOP_CONF_DIR = "oozie.action.spark.setup.hadoop.conf.dir";
 
@@ -75,6 +79,13 @@ public class SparkActionExecutor extends JavaActionExecutor {
 
         String jarLocation = actionXml.getChildTextTrim("jar", ns);
         actionConf.set(SPARK_JAR, jarLocation);
+
+        String sparkVersionFromXML = actionXml.getChildTextTrim("spark_version" , ns);
+        if("2".equalsIgnoreCase(sparkVersionFromXML)) {
+            sparkVersion = 2;
+        }else{
+            sparkVersion = 1;
+        }
 
         StringBuilder sparkOptsSb = new StringBuilder();
         if (master.startsWith("yarn")) {
@@ -137,7 +148,11 @@ public class SparkActionExecutor extends JavaActionExecutor {
     public List<Class> getLauncherClasses() {
         List<Class> classes = new ArrayList<Class>();
         try {
-            classes.add(Class.forName(SPARK_MAIN_CLASS_NAME));
+            if(sparkVersion == 1) {
+                classes.add(Class.forName(SPARK_MAIN_CLASS_NAME));
+            }else {
+                classes.add(Class.forName(SPARK_MAIN_CLASS_NAME_2));
+            }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Class not found", e);
         }
